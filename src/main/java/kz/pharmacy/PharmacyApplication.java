@@ -1,81 +1,118 @@
 package kz.pharmacy;
-
+//importing necessary classes and packages
 import kz.pharmacy.connector.DatabaseConnector;
 import kz.pharmacy.models.Customer;
 import kz.pharmacy.models.Medicine;
 import kz.pharmacy.service.CustomerService;
 import kz.pharmacy.service.MedicineService;
-import kz.pharmacy.service.OrderService;
-
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Scanner;
 
 public class PharmacyApplication {
     public static void main(String[] args) throws SQLException {
         System.out.println("PharmacyApplication is running\n");
+        //Creating Scanner object for input
+        try (Scanner scanner = new Scanner(System.in)) {
 
-        try {
-
-            System.out.println("Medicines start <---------------------------------------->\n");
-
-            // Creating medicineService object for working with medicines
-            MedicineService medicineService = new MedicineService(DatabaseConnector.getConnection());
-
-            // Getting all medicines list
-            List<Medicine> medicines = medicineService.getAllMedicines();
-
-            // Print info about medicines
-            System.out.println("Medicines:");
-            for (Medicine medicine : medicines) {
-                medicine.printInfo();
-            }
-
-            System.out.println("\nMedicines end <---------------------------------------->\n");
-
-            System.out.println("Customers start <---------------------------------------->\n");
-
-            // Creating customerService object for working with customers
-            CustomerService customerService = new CustomerService(DatabaseConnector.getConnection());
-
-
-            // Getting all  customers list
-            List<Customer> customers = customerService.getAllCustomers();
-
-            // Print info about customers
-            System.out.println("Customers:");
-            for (Customer customer : customers) {
-                customer.printInfo();
-            }
-
-            System.out.println("\nCustomers end <---------------------------------------->\n");
-
-
-            System.out.println("\nOrders start <---------------------------------------->\n");
-
-            // Creating orderService object for working with orders
-            OrderService orderService = new OrderService(DatabaseConnector.getConnection());
-
-            //Print info about orders
-            orderService.printOrderDetailsInfo();
-
-
-            System.out.println("\nOrders end <---------------------------------------->\n");
-
-        } catch (SQLException e) {
-            System.out.println("PharmacyApplication Error: " + e.getMessage());
-        } finally {
-            if (DatabaseConnector.getConnection() != null) {
-                try {
-                    System.out.println("Database Connection is not null: closing");
-                    DatabaseConnector.getConnection().close();
-                    System.out.println("Database Connection is not null: closed");
-                } catch (SQLException e) {
-                    System.out.println("Could not close the connection: " + e.getMessage());
+            try {
+                boolean running = true;
+                while (running) {
+                    //Displaying main menu options
+                    System.out.println("Select an option:");
+                    System.out.println("1: Add new customer");
+                    System.out.println("2: Add new medicine");
+                    System.out.println("3: Exit");
+                    // Reading user input for option selection
+                    int option = scanner.nextInt();
+                    switch (option) {
+                        case 1:
+                            addNewCustomer(scanner);
+                            break;
+                        case 2:
+                            addNewMedicine(scanner);
+                            break;
+                        case 3:
+                            System.out.println("Exiting...");
+                            running = false;
+                            break;
+                        default:
+                            System.out.println("Invalid option selected");
+                            break;
+                    }
                 }
+            } catch (SQLException e) {
+                // Handling SQLException thrown during database operations
+                System.out.println("PharmacyApplication Error: " + e.getMessage());
+            } finally {
+                // Closing database connection and scanner
+                if (DatabaseConnector.getConnection() != null) {
+                    try {
+                        DatabaseConnector.getConnection().close();
+                    } catch (SQLException e) {
+                        System.out.println("Could not close the connection: " + e.getMessage());
+                    }
+                }
+                scanner.close();
+                System.out.println("\nPharmacyApplication is stopped");
             }
+        }
+    }
 
+    // Method to add a new customer
+    private static void addNewCustomer(Scanner scanner) throws SQLException {
+        // Prompting user to enter customer details
+        System.out.println("Enter first name:");
+        String firstName = scanner.next();
+        System.out.println("Enter last name:");
+        String lastName = scanner.next();
+        System.out.println("Enter address:");
+        scanner.nextLine(); // Очистка буфера
+        String address = scanner.nextLine();
+        System.out.println("Enter phone number:");
+        String phoneNumber = scanner.next();
+        // Creating a new Customer object with input data
+        Customer newCustomer = new Customer();
+        newCustomer.setFirstName(firstName);
+        newCustomer.setLastName(lastName);
+        newCustomer.setAddress(address);
+        newCustomer.setPhoneNumber(phoneNumber);
+        // Creating CustomerService instance and adding the new customer
+        CustomerService customerService = new CustomerService(DatabaseConnector.getConnection());
+        if (customerService.addCustomer(newCustomer)) {
+            System.out.println("New customer added successfully.");
+        } else {
+            System.out.println("Failed to add new customer.");
+        }
+    }
+    // Method to add a new medicine
+    private static void addNewMedicine(Scanner scanner) throws SQLException {
+        // Prompting user to enter medicine details
+        System.out.println("Enter medicine name:");
+        String name = scanner.next();
+        System.out.println("Enter manufacturer:");
+        scanner.nextLine(); // Cleaning buffer
+        String manufacturer = scanner.nextLine();
+        System.out.println("Enter dosage:");
+        String dosage = scanner.next();
+        System.out.println("Enter form:");
+        String form = scanner.next();
+        System.out.println("Enter price:");
+        double price = scanner.nextDouble();
 
-            System.out.println("\nPharmacyApplication is stopped");
+        // Creating a new Medicine object with input data
+        Medicine newMedicine = new Medicine();
+        newMedicine.setName(name);
+        newMedicine.setManufacturer(manufacturer);
+        newMedicine.setDosage(dosage);
+        newMedicine.setForm(form);
+        newMedicine.setPrice(price);
+
+        // Creating MedicineService instance and adding the new medicine
+        MedicineService medicineService = new MedicineService(DatabaseConnector.getConnection());
+        if (medicineService.addMedicine(newMedicine)) {
+            System.out.println("New medicine added successfully.");
+        } else {
+            System.out.println("Failed to add new medicine.");
         }
     }
 }

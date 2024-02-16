@@ -8,12 +8,7 @@ create table  customers
     phone_number varchar(20)
 );
 
-create table  medicine_categories
-(
-    category_id serial
-        primary key,
-    name        varchar(255)
-);
+
 
 create table  medicines
 (
@@ -29,27 +24,6 @@ create table  medicines
             references medicine_categories
 );
 
-create table  orders
-(
-    order_id     serial
-        primary key,
-    customer_id  integer
-        references customers,
-    order_date   date,
-    total_amount numeric(10, 2)
-);
 
-
-create table  order_details
-(
-    detail_id   serial
-        primary key,
-    order_id    integer
-        references orders,
-    medicine_id integer
-        references medicines,
-    quantity    integer,
-    subtotal    numeric(10, 2)
-);
 
 

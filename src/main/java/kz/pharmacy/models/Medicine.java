@@ -5,24 +5,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-// Annotations
+// // Annotations for generating constructors, getters, setters, and providing default constructor
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class Medicine extends Entity implements Printable {
+    // Fields representing properties of a medicine
     private String name;
     private String manufacturer;
     private String dosage;
     private String form;
     private double price;
-    private int categoryId;
 
+    // Implementation of the printInfo method from the Printable interface
     @Override
     public void printInfo() {
         System.out.println("Medicine ID -  " + id + "; Name -  " + name + "; Manufacturer -  "
                 + manufacturer + "; Dosage -  " + dosage + "; Form -  " + form
-                + "; Price -  $" + price + "; Category ID -  " + categoryId + "; ");
+                + "; Price -  $" + price + "; ");
     }
 
 }

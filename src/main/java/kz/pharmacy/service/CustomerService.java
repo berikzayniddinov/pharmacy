@@ -2,9 +2,11 @@ package kz.pharmacy.service;
 
 import kz.pharmacy.models.Customer;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import java.sql.SQLException;
+
 
 public class CustomerService {
     private Connection connection;
@@ -12,44 +14,23 @@ public class CustomerService {
     public CustomerService(Connection connection) {
         this.connection = connection;
     }
-    public Customer getCustomerById(int customerId) {
-        Customer customer = null;
-        try {
-            String query = "SELECT * FROM customers WHERE customer_id = ?";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setInt(1, customerId);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                if (resultSet.next()) {
-                    customer = new Customer();
-                    customer.setId(resultSet.getInt("customer_id"));
-                    customer.setFirstName(resultSet.getString("first_name"));
-                    customer.setLastName(resultSet.getString("last_name"));
-                    customer.setAddress(resultSet.getString("address"));
-                    customer.setPhoneNumber(resultSet.getString("phone_number"));
-                }
-            }
+
+    public boolean addCustomer(Customer customer) {
+        String query = "INSERT INTO customers (first_name, last_name, address, phone_number) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, customer.getFirstName());
+            preparedStatement.setString(2, customer.getLastName());
+            preparedStatement.setString(3, customer.getAddress());
+            preparedStatement.setString(4, customer.getPhoneNumber());
+
+            int affectedRows = preparedStatement.executeUpdate();
+
+            return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return customer;
     }
-    public List<Customer> getAllCustomers() {
-        List<Customer> customers = new ArrayList<>();
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM customers");
-            while (resultSet.next()) {
-                Customer customer = new Customer();
-                customer.setId(resultSet.getInt("customer_id"));
-                customer.setFirstName(resultSet.getString("first_name"));
-                customer.setLastName(resultSet.getString("last_name"));
-                customer.setAddress(resultSet.getString("address"));
-                customer.setPhoneNumber(resultSet.getString("phone_number"));
-                customers.add(customer);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return customers;
-    }
+
+
 }
