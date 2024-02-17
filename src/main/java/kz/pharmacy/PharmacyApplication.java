@@ -6,6 +6,7 @@ import kz.pharmacy.models.Medicine;
 import kz.pharmacy.service.CustomerService;
 import kz.pharmacy.service.MedicineService;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 public class PharmacyApplication {
@@ -21,7 +22,8 @@ public class PharmacyApplication {
                     System.out.println("Select an option:");
                     System.out.println("1: Add new customer");
                     System.out.println("2: Add new medicine");
-                    System.out.println("3: Exit");
+                    System.out.println("3, See list of all medicines");
+                    System.out.println("4: Exit");
                     // Reading user input for option selection
                     int option = scanner.nextInt();
                     switch (option) {
@@ -31,8 +33,12 @@ public class PharmacyApplication {
                         case 2:
                             addNewMedicine(scanner);
                             break;
+
                         case 3:
-                            System.out.println("Exiting...");
+                            getAllMedicines();
+                            break;
+                        case 4:
+                        System.out.println("Exiting...");
                             running = false;
                             break;
                         default:
@@ -66,10 +72,13 @@ public class PharmacyApplication {
         System.out.println("Enter last name:");
         String lastName = scanner.next();
         System.out.println("Enter address:");
-        scanner.nextLine(); // Очистка буфера
+        scanner.nextLine(); //
         String address = scanner.nextLine();
         System.out.println("Enter phone number:");
         String phoneNumber = scanner.next();
+
+
+
         // Creating a new Customer object with input data
         Customer newCustomer = new Customer();
         newCustomer.setFirstName(firstName);
@@ -115,4 +124,14 @@ public class PharmacyApplication {
             System.out.println("Failed to add new medicine.");
         }
     }
+        private static void getAllMedicines() throws SQLException {
+            MedicineService medicineService = new MedicineService(DatabaseConnector.getConnection());
+            List<Medicine> medicines = medicineService.getAllMedicines();
+            System.out.println("List of all medicines:");
+            for (Medicine medicine : medicines) {
+                medicine.printInfo(); // Используем метод printInfo для каждого объекта Medicine
+            }
+        }
+
+
 }
