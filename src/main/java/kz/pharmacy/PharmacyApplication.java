@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
+
+
 public class PharmacyApplication {
     public static void main(String[] args) throws SQLException {
         System.out.println("PharmacyApplication is running\n");
@@ -23,7 +25,10 @@ public class PharmacyApplication {
                     System.out.println("1: Add new customer");
                     System.out.println("2: Add new medicine");
                     System.out.println("3, See list of all medicines");
-                    System.out.println("4: Exit");
+
+                    System.out.println("4: Register new customer");
+                    System.out.println("5: Login");
+                    System.out.println("6: Exit");
                     // Reading user input for option selection
                     int option = scanner.nextInt();
                     switch (option) {
@@ -37,7 +42,13 @@ public class PharmacyApplication {
                         case 3:
                             getAllMedicines();
                             break;
+
                         case 4:
+                            registerNewCustomer(scanner);
+                            break;
+                        case 5:
+                            login(scanner);
+                        case 6:
                         System.out.println("Exiting...");
                             running = false;
                             break;
@@ -132,6 +143,47 @@ public class PharmacyApplication {
                 medicine.printInfo(); // Используем метод printInfo для каждого объекта Medicine
             }
         }
+
+
+
+
+
+
+    private static void registerNewCustomer(Scanner scanner) throws SQLException {
+        // Prompting user to enter customer details
+        System.out.println("Enter first name:");
+        String firstName = scanner.next();
+        System.out.println("Enter last name:");
+        String lastName = scanner.next();
+
+
+        // Creating a new Customer object with input data
+        Customer newCustomer = new Customer();
+        newCustomer.setFirstName(firstName);
+        newCustomer.setLastName(lastName);
+
+
+
+        // Creating CustomerService instance and registering the new customer
+        CustomerService customerService = new CustomerService(DatabaseConnector.getConnection());
+        if (customerService.registerCustomer(newCustomer.getFirstName(), newCustomer.getLastName())) {
+            System.out.println("New customer registered successfully.");
+        } else {
+            System.out.println("Failed to register new customer.");
+        }
+    }
+
+    private static void login(Scanner scanner) throws SQLException {
+        System.out.println("Enter username:");
+        String username = scanner.next();
+
+        CustomerService customerService = new CustomerService(DatabaseConnector.getConnection());
+        if (customerService.loginCustomer(username)) {
+            System.out.println("Login successful.");
+        } else {
+            System.out.println("Invalid username.");
+        }
+    }
 
 
 }
