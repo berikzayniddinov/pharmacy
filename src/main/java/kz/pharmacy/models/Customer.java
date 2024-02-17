@@ -32,10 +32,12 @@ public class Customer extends Entity implements Printable {
     }
 
     public void setAddress(String address) {
+
         this.address = address;
     }
 
     public String getPhoneNumber() {
+
         return phoneNumber;
     }
 
