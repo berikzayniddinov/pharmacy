@@ -83,7 +83,7 @@ public class PharmacyApplication {
         System.out.println("Enter last name:");
         String lastName = scanner.next();
         System.out.println("Enter address:");
-        scanner.nextLine(); //
+        scanner.nextLine();
         String address = scanner.nextLine();
         System.out.println("Enter phone number:");
         String phoneNumber = scanner.next();
@@ -110,7 +110,7 @@ public class PharmacyApplication {
         System.out.println("Enter medicine name:");
         String name = scanner.next();
         System.out.println("Enter manufacturer:");
-        scanner.nextLine(); // Cleaning buffer
+        scanner.nextLine();
         String manufacturer = scanner.nextLine();
         System.out.println("Enter dosage:");
         String dosage = scanner.next();
@@ -140,7 +140,7 @@ public class PharmacyApplication {
             List<Medicine> medicines = medicineService.getAllMedicines();
             System.out.println("List of all medicines:");
             for (Medicine medicine : medicines) {
-                medicine.printInfo(); // Используем метод printInfo для каждого объекта Medicine
+                medicine.printInfo();
             }
         }
 

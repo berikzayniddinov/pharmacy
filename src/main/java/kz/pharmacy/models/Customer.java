@@ -14,9 +14,7 @@ public class Customer extends Entity implements Printable {
     private String lastName;
     private String address;
     private String phoneNumber;
-    private String username;
-    private String password;
-    private String email;
+
 
     @Override
     public void printInfo() {

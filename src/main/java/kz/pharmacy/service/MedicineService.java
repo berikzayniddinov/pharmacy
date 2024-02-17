@@ -1,6 +1,5 @@
 package kz.pharmacy.service;
 //importing necessary classes and packages
-import kz.pharmacy.models.Customer;
 import kz.pharmacy.models.Medicine;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -59,27 +58,7 @@ public class MedicineService {
             return Medicine;
         }
 
-    public Medicine findMedicine(String identifier) {
-        Medicine medicine = null;
-        String query = "SELECT * FROM medicines WHERE name = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, identifier);
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                medicine = new Medicine();
-
-                medicine.setName(resultSet.getString("name"));
-                medicine.setManufacturer(resultSet.getString("manufacturer"));
-                medicine.setDosage(resultSet.getString("dosage"));
-                medicine.setForm(resultSet.getString("form"));
-                medicine.setPrice(resultSet.getDouble("price"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return medicine;
-    }
 
 }
 
