@@ -18,14 +18,15 @@ public class MedicineService {
     // Method to add a new medicine to the database
     public boolean addMedicine(Medicine medicine) {
         // SQL query to insert medicine data into the database
-        String query = "INSERT INTO medicines (name, manufacturer, dosage, form, price) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO medicines (medicine_id, name, manufacturer, dosage, form, price) VALUES (?, ?, ?, ?, ?, ?)";
         // Setting parameters for the prepared statement
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, medicine.getName());
-            preparedStatement.setString(2, medicine.getManufacturer());
-            preparedStatement.setString(3, medicine.getDosage());
-            preparedStatement.setString(4, medicine.getForm());
-            preparedStatement.setDouble(5, medicine.getPrice());
+            preparedStatement.setInt(1, medicine.getMedicine_id());
+            preparedStatement.setString(2, medicine.getName());
+            preparedStatement.setString(3, medicine.getManufacturer());
+            preparedStatement.setString(4, medicine.getDosage());
+            preparedStatement.setString(5, medicine.getForm());
+            preparedStatement.setDouble(6, medicine.getPrice());
 
 
             // Executing the update query
@@ -44,7 +45,7 @@ public class MedicineService {
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
                     Medicine medicine = new Medicine();
-
+                    medicine.setMedicine_id(resultSet.getInt("medicine id"));
                     medicine.setName(resultSet.getString("name"));
                     medicine.setManufacturer(resultSet.getString("manufacturer"));
                     medicine.setDosage(resultSet.getString("dosage"));

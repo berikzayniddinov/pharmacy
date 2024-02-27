@@ -9,7 +9,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Customer extends Entity implements Printable {
+
+public class Customer extends  Entity implements Printable {
+    private int customer_id;
     private String firstName;
     private String lastName;
     private String address;
@@ -18,6 +20,6 @@ public class Customer extends Entity implements Printable {
 
     @Override
     public void printInfo() {
-        System.out.println(id + ": " + firstName + " " + lastName + " - " + address + ", " + phoneNumber);
+        System.out.println(customer_id + ": " + firstName + " " + lastName + " - " + address + ", " + phoneNumber);
     }
 }

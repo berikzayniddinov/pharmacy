@@ -1,7 +1,7 @@
 package kz.pharmacy.service;
 
 import kz.pharmacy.models.Customer;
-import kz.pharmacy.models.Medicine;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,12 +18,13 @@ public class CustomerService {
     }
 
     public boolean addCustomer(Customer customer) {
-        String query = "INSERT INTO customers (first_name, last_name, address, phone_number) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO customers (customer_id, first_name, last_name, address, phone_number) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, customer.getFirstName());
-            preparedStatement.setString(2, customer.getLastName());
-            preparedStatement.setString(3, customer.getAddress());
-            preparedStatement.setString(4, customer.getPhoneNumber());
+            preparedStatement.setInt(1, customer.getCustomer_id());
+            preparedStatement.setString(2, customer.getFirstName());
+            preparedStatement.setString(3, customer.getLastName());
+            preparedStatement.setString(4, customer.getAddress());
+            preparedStatement.setString(5, customer.getPhoneNumber());
 
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -34,10 +35,10 @@ public class CustomerService {
         }
     }
 
-    public boolean loginCustomer(String username) {
+    public boolean loginCustomer(String firstName) {
         String query = "SELECT COUNT(*) FROM customers WHERE first_name = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, username);
+            preparedStatement.setString(1, firstName);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 int count = resultSet.getInt(1);

@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 public class Medicine extends Entity implements Printable {
     // Fields representing properties of a medicine
+    private int medicine_id;
     private String name;
     private String manufacturer;
     private String dosage;
@@ -21,7 +22,7 @@ public class Medicine extends Entity implements Printable {
     // Implementation of the printInfo method from the Printable interface
     @Override
     public void printInfo() {
-        System.out.println("Medicine ID -  " + id + "; Name -  " + name + "; Manufacturer -  "
+        System.out.println("Medicine ID -  " + medicine_id + "; Name -  " + name + "; Manufacturer -  "
                 + manufacturer + "; Dosage -  " + dosage + "; Form -  " + form
                 + "; Price -  $" + price + "; ");
     }
